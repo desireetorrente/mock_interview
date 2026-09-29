@@ -4,6 +4,7 @@ Disponemos de un histórico de componentes que anteriormente han dado problemas 
 en cada fábrica.
 Tenemos estas estructuras:
 '''
+from collections import defaultdict
 from dataclasses import dataclass
 
 
@@ -73,20 +74,19 @@ def find_shipments_requiring_inspection(
     defect_records: list[DefectRecord],
     shipments: list[Shipment],
 ) -> list[str]:
-    shipments_requiring_inspection = []
-    defects_by_factory = {}
+    shipments_requiring_inspection: list[str] = []
+    defects_by_factory: dict[str, set[str]] = defaultdict(set)
 
     for defect_record in defect_records:
-        if defect_record.factory_id not in defects_by_factory:
-            defects_by_factory[defect_record.factory_id] = set()
         defects_by_factory[defect_record.factory_id].add(defect_record.component_code)
 
     for shipment in shipments:
-        if shipment.factory_id not in defects_by_factory:
+        defective_components = defects_by_factory.get(shipment.factory_id)
+        if not defective_components:
             continue
 
         for shipment_component in shipment.components:
-            if shipment_component.code in defects_by_factory[shipment.factory_id]:
+            if shipment_component.code in defective_components:
                 shipments_requiring_inspection.append(shipment.shipment_id)
                 break
 
