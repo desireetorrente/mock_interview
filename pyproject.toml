@@ -1,0 +1,14 @@
+[project]
+name = "mock-interview"
+version = "0.1.0"
+description = "practice for mock interview"
+readme = "README.md"
+authors = [
+    { name = "Desireé Torrente", email = "desiree.torrente@gmail.com" }
+]
+requires-python = ">=3.12"
+dependencies = [
+    "pytest>=9.1.1",
+]
+
+
